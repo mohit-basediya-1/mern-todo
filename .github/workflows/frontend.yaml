@@ -35,8 +35,17 @@ jobs:
 
       - name: Deploy to Vercel
         run: |
-          npx vercel --prod \
-            --token=${{ secrets.VERCEL_TOKEN }} \
-            --scope ${{ secrets.VERCEL_ORG_ID }} \
-            --confirm \
-            --project ${{ secrets.VERCEL_PROJECT_ID }}
+          if [ -n "${{ secrets.VERCEL_ORG_ID }}" ]; then
+            echo "Deploying with team/org scope..."
+            npx vercel --prod \
+              --token=${{ secrets.VERCEL_TOKEN }} \
+              --scope ${{ secrets.VERCEL_ORG_ID }} \
+              --confirm \
+              --project ${{ secrets.VERCEL_PROJECT_ID }}
+          else
+            echo "Deploying without scope (personal account)..."
+            npx vercel --prod \
+              --token=${{ secrets.VERCEL_TOKEN }} \
+              --confirm \
+              --project ${{ secrets.VERCEL_PROJECT_ID }}
+          fi
