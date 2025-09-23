@@ -35,5 +35,4 @@ jobs:
         run: |
           npx vercel --prod \
             --token=${{ secrets.VERCEL_TOKEN }} \
-            --confirm \
-            --project=${{ secrets.VERCEL_PROJECT_ID }}
+            --confirm
