@@ -20,6 +20,11 @@ export default function Home() {
         fetchTodos();
     };
 
+    const handleEdit = async (id: string, text: string) => {
+        await updateTodo(id, { text });
+        fetchTodos();
+    };
+
     const handleToggle = async (id: string, completed: boolean) => {
         await updateTodo(id, { completed });
         fetchTodos();
@@ -41,6 +46,7 @@ export default function Home() {
                         todo={todo}
                         onToggle={handleToggle}
                         onDelete={handleDelete}
+                        onEdit={handleEdit}
                     />
                 ))}
             </div>
