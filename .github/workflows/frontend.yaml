@@ -1,7 +1,9 @@
-name: Frontend CI
+name: Frontend CI/CD
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "frontend/**"
   pull_request:
@@ -9,7 +11,7 @@ on:
       - "frontend/**"
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     defaults:
@@ -30,3 +32,11 @@ jobs:
 
       - name: Build frontend
         run: npm run build
+
+      - name: Deploy to Vercel
+        run: |
+          npx vercel --prod \
+            --token=${{ secrets.VERCEL_TOKEN }} \
+            --scope ${{ secrets.VERCEL_ORG_ID }} \
+            --confirm \
+            --project ${{ secrets.VERCEL_PROJECT_ID }}

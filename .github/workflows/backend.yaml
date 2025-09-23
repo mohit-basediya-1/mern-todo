@@ -1,7 +1,9 @@
-name: Backend CI
+name: Backend CI/CD
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "backend/**"
   pull_request:
@@ -9,7 +11,7 @@ on:
       - "backend/**"
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     defaults:
@@ -34,8 +36,8 @@ jobs:
       - name: Run tests (placeholder)
         run: echo "No tests yet"
 
-      - name: Use secrets
-        run: echo "MONGO_URI and PORT loaded"
-        env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          PORT: ${{ secrets.PORT }}
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+          -H "Accept: application/json" \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
