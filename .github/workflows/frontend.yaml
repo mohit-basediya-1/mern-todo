@@ -2,8 +2,6 @@ name: Frontend CI/CD
 
 on:
   push:
-    branches:
-      - main
     paths:
       - "frontend/**"
   pull_request:
@@ -11,7 +9,7 @@ on:
       - "frontend/**"
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     defaults:
@@ -35,17 +33,7 @@ jobs:
 
       - name: Deploy to Vercel
         run: |
-          if [ -n "${{ secrets.VERCEL_ORG_ID }}" ]; then
-            echo "Deploying with team/org scope..."
-            npx vercel --prod \
-              --token=${{ secrets.VERCEL_TOKEN }} \
-              --scope ${{ secrets.VERCEL_ORG_ID }} \
-              --confirm \
-              --project ${{ secrets.VERCEL_PROJECT_ID }}
-          else
-            echo "Deploying without scope (personal account)..."
-            npx vercel --prod \
-              --token=${{ secrets.VERCEL_TOKEN }} \
-              --confirm \
-              --project ${{ secrets.VERCEL_PROJECT_ID }}
-          fi
+          npx vercel --prod \
+            --token=${{ secrets.VERCEL_TOKEN }} \
+            --confirm \
+            --project=${{ secrets.VERCEL_PROJECT_ID }}
